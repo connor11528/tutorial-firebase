@@ -10,14 +10,18 @@
     <input type='text' id='nameInput' placeholder='Name'>
     <input type='text' id='messageInput' placeholder='Message'>
     <script>
-      var myDataRef = new Firebase('https://mombasa.firebaseio.com/');
+      var myDataRef = new Firebase('https://jasonsharkdemo.firebaseio.com/');
 
       $('#messageInput').keypress(function (e) {
         if (e.keyCode == 13) {
           var name = $('#nameInput').val();
           var text = $('#messageInput').val();
-          myDataRef.push({name: name, text: text});
-          $('#messageInput').val('');
+          myDataRef.push({
+            name: name, 
+            text: text, 
+            anything: [1,2,3,4]
+          });
+          $('#messageInput').val(''); //reset
         }
       });
 
