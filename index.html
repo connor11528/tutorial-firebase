@@ -1,43 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Chat app</title>
-	
-	<link rel='stylesheet' href='css/bootstrap.css'>
-	<link rel="stylesheet" href="css/style.css">
-</head>
-<body ng-app='tutorialFirebase'>
-	<!-- 
-	This is the way to get rid of angular expressions loading
-	before angular library does
-	
-	<div ng-include src="'views/header.html'"></div>
-    <div class="container" ng-view=""></div>
-    -->
-    
-	<div ng-controller='MainCtrl'>
-		<div class='messages'>
-			<div ng-repeat='m in messages'>
-				<b>{{m.name}}</b>: {{m.text}}
-			</div>
-		</div>
+  <head>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+    <link rel='stylesheet' type='text/css' href='../css/example.css'>
+  </head>
+  <body>
+    <div id='messagesDiv'></div>
+    <input type='text' id='nameInput' placeholder='Name'>
+    <input type='text' id='messageInput' placeholder='Message'>
+    <script>
+      var myDataRef = new Firebase('https://mombasa.firebaseio.com/');
 
-		<form ng-submit='sendMessage()'>
-			<input type='text' placeholder='Name' ng-model='message.name'>
-			<input type='textarea' placeholder='Message' ng-model='message.text'>
-			<input type='submit' value='Send' class='btn btn-success'>
-		</form>
-	</div>
+      $('#messageInput').keypress(function (e) {
+        if (e.keyCode == 13) {
+          var name = $('#nameInput').val();
+          var text = $('#messageInput').val();
+          myDataRef.push({name: name, text: text});
+          $('#messageInput').val('');
+        }
+      });
 
-<script src="http://static.firebase.com/v0/firebase.js"></script>
+      myDataRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+        displayChatMessage(message.name, message.text);
+      });
 
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
-<script src='js/lib/jquery-1.10.2.js'></script>
-<script src='js/lib/bootstrap.js'></script>
-<script src='js/app.js'></script>
-<script src='js/services/Message.js'></script>
-<script src='js/controllers/main.js'></script>
-</body>
+      function displayChatMessage(name, text) {
+        $('<div/>').text(text)
+                    .prepend($('<em/>')
+                    .text(name+': '))
+                    .appendTo($('#messagesDiv'));
+                    
+        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+      };
+    </script>
+  </body>
 </html>

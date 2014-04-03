@@ -1,0 +1,13 @@
+<div ng-controller='MainCtrl'>
+		<div class='messages'>
+			<div ng-repeat='m in messages'>
+				<b>{{m.name}}</b>: {{m.text}}
+			</div>
+		</div>
+	
+		<form ng-submit='sendMessage()'>
+			<input type='text' placeholder='Name' ng-model='message.name'>
+			<input type='textarea' placeholder='Message' ng-model='message.text'>
+			<input type='submit' value='Send' class='btn btn-success'>
+		</form>
+</div>

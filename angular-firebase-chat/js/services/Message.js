@@ -7,11 +7,14 @@ app.factory('Message', function(){
 	var Message = {
       getMessages: function() {
         var messages = [];
-        ref.on("child_added", function(snapshot) {
-          messages.push(snapshot.val());
+        
+        // updates messages when new data is added
+        ref.on('child_added', function(snapshot) {
+			messages.push(snapshot.val());
         });
         return messages;
       },
+      
       addMessage: function(message) {
         ref.push(message);
       }
